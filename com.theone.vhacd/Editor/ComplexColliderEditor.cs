@@ -505,7 +505,7 @@ namespace VHACD.Unity
                     mc.sharedMesh = data.computedMeshes[i];
                     mc.hideFlags = _hideColliders.boolValue ? HideFlags.HideInInspector : HideFlags.None;
                     mc.isTrigger = _isTrigger.boolValue;
-                    mc.material = (PhysicMaterial)_physicMaterial.objectReferenceValue;
+                    mc.material = (PhysicsMaterial)_physicMaterial.objectReferenceValue;
                 }
             }
             else

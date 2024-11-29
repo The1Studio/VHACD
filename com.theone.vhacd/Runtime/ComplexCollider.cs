@@ -47,9 +47,9 @@ namespace VHACD.Unity
         }
 
         [SerializeField, Tooltip("Applies to all child colliders")]
-        private PhysicMaterial _material = null;
+        private PhysicsMaterial _material = null;
 
-        public PhysicMaterial Material
+        public PhysicsMaterial Material
         {
             set { _material = value; UpdateColliders(enabled); }
             get { return _material; }

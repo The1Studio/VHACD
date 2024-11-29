@@ -2,7 +2,8 @@
     "name": "VHACDEditor",
     "rootNamespace": "",
     "references": [
-        "GUID:b0dc65aa46d174cbab72d2bfef413320"
+        "GUID:b0dc65aa46d174cbab72d2bfef413320",
+        "GUID:65e9f87f782e8cd43b459a27418943c3"
     ],
     "includePlatforms": [
         "Editor"

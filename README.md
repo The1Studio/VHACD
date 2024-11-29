@@ -19,7 +19,7 @@ The V-HACD library decomposes a 3D surface into a set of "near" convex parts. Wi
 3. Enter the git URL for the desired package. Note: you can append a version tag to the end of the git url, like `#v0.4.0` or `#v0.5.0`, to declare a specific package version, or exclude the tag to get the latest from the package's `main` branch.
 
     ```
-    https://github.com/rorygames/VHACD.git?path=/com.theone.vhacd
+    https://github.com/The1Studio/VHACD.git?path=/com.theone.vhacd
     ```
 
 4. Click `Add`.

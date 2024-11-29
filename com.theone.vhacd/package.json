@@ -1,5 +1,5 @@
 {
-  "name": "com.rorygames.vhacd",
+  "name": "com.theone.vhacd",
   "version": "0.5.0",
   "displayName": "V-HACD - Complex Colliders",
   "description": "Adds \"Complex Colliders\" components, which implement the VHACD algorithm. This provides significantly more accurate convex mesh colliders.",

@@ -7,6 +7,7 @@ using System;
 
 namespace VHACD.Unity
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(ComplexCollider))]
     public class ComplexColliderEditor : Editor
     {
@@ -235,36 +236,14 @@ namespace VHACD.Unity
             EditorGUI.BeginDisabledGroup(!_base.TryGetComponent<MeshFilter>(out var filter));
             if (GUILayout.Button($"Calculate Colliders From Current Mesh Filter"))
             {
-                if(_colliderData.objectReferenceValue != null)
-                {
-                    if (EditorUtility.DisplayDialog("Caution", $"This will overwrite the meshes stored within the current asset. All other instances in use will have their colliders updated on validate or awake." +
-                    $"\nAre you sure you wish to continue?", "Continue", "Cancel"))
-                    {
-                        CalculateColliders(_base.Parameters, (ComplexColliderData)_colliderData.objectReferenceValue, false);
-                    }
-                }
-                else
-                {
-                    CalculateColliders(_base.Parameters, null, false);
-                }
+                this.CalculateColliderFromCurrentMeshFilter();
             }
             EditorGUI.EndDisabledGroup();
             MeshFilter[] filters = _base.GetComponentsInChildren<MeshFilter>(true);
             EditorGUI.BeginDisabledGroup(filters.Length == 0);
             if (GUILayout.Button($"Calculate Colliders From All Child Mesh Filters"))
             {
-                if (_colliderData.objectReferenceValue != null && ((ComplexColliderData)_colliderData.objectReferenceValue).quality == _quality.intValue)
-                {
-                    if (EditorUtility.DisplayDialog("Caution", $"This will overwrite the meshes stored within the current asset. All other instances in use will have their colliders updated on validate or awake." +
-                    $"\nAre you sure you wish to continue?", "Continue", "Cancel"))
-                    {
-                        CalculateColliders(_base.Parameters, (ComplexColliderData)_colliderData.objectReferenceValue, true);
-                    }
-                }
-                else
-                {
-                    CalculateColliders(_base.Parameters, null, true);
-                }
+                this.CalculateColliderFromChildMeshFilter();
             }
             EditorGUI.EndDisabledGroup();
 
@@ -273,8 +252,50 @@ namespace VHACD.Unity
             EditorGUI.EndDisabledGroup();
         }
 
+        public void CalculateColliderFromCurrentMeshFilter()
+        {
+            if (!_base.TryGetComponent<MeshFilter>(out var filter))
+            {
+                Debug.LogError($"GameObject: {this._base.name} is missing {nameof(MeshFilter)}");
+                return;
+            }
+            if (_colliderData.objectReferenceValue != null)
+            {
+                if (EditorUtility.DisplayDialog("Caution", $"This will overwrite the meshes stored within the current asset. All other instances in use will have their colliders updated on validate or awake." +
+                                                           $"\nAre you sure you wish to continue?", "Continue", "Cancel"))
+                {
+                    CalculateColliders(_base.Parameters, (ComplexColliderData)_colliderData.objectReferenceValue, false);
+                }
+            }
+            else
+            {
+                CalculateColliders(_base.Parameters, null, false);
+            }
+        }
+
+        public void CalculateColliderFromChildMeshFilter()
+        {
+            if (this._base.GetComponentsInChildren<MeshFilter>().Length == 0)
+            {
+                Debug.LogError($"GameObject: {this._base.name} don't has child with {nameof(MeshFilter)}");
+                return;
+            }
+            if (_colliderData.objectReferenceValue != null && ((ComplexColliderData)_colliderData.objectReferenceValue).quality == _quality.intValue)
+            {
+                if (EditorUtility.DisplayDialog("Caution", $"This will overwrite the meshes stored within the current asset. All other instances in use will have their colliders updated on validate or awake." +
+                                                           $"\nAre you sure you wish to continue?", "Continue", "Cancel"))
+                {
+                    CalculateColliders(_base.Parameters, (ComplexColliderData)_colliderData.objectReferenceValue, true);
+                }
+            }
+            else
+            {
+                CalculateColliders(_base.Parameters, null, true);
+            }
+        }
+
         private void CalculateColliders(Parameters parameters, ComplexColliderData data, bool combine)
-        { 
+        {
             Mesh mesh = null;
             string path = "";
             EditorUtility.DisplayProgressBar("Calculating Colliders", "Discovering meshes...", 0.1f);

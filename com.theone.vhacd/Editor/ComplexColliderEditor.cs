@@ -305,7 +305,7 @@ namespace VHACD.Unity
         {
             if (this._base)
             {
-                foreach (var col in this._base.GetComponentsInChildren<MeshCollider>())
+                foreach (var col in this._base.GetComponents<MeshCollider>())
                 {
                     DestroyImmediate(col);
                 }
@@ -316,6 +316,7 @@ namespace VHACD.Unity
 
                 this._base.ColliderData = null;
                 this._base.Colliders.Clear();
+                AssetDatabase.Refresh();
             }
         }
 

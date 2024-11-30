@@ -1,12 +1,12 @@
 ﻿namespace VHACD.Unity
 {
+    using System;
     using UnityEditor;
     using UnityEngine;
 
     public class ComplexColliderEditorWindow : EditorWindow
     {
-        [MenuItem("TheOne/Complex Collider Editor")]
-        public static void Open()
+        [MenuItem("TheOne/Complex Collider Editor")] public static void Open()
         {
             var window = GetWindow<ComplexColliderEditorWindow>();
             window.minSize = new Vector2(400, 120);
@@ -18,28 +18,28 @@
         {
             if (GUILayout.Button("Calculate Colliders From Current Mesh Filter"))
             {
-                var allObj = FindObjectsByType<ComplexCollider>(FindObjectsSortMode.None);
-                foreach (var obj in allObj)
-                {
-                    var inspector = (ComplexColliderEditor)Editor.CreateEditor(obj);
-                    if (inspector != null)
-                    {
-                        inspector.OnInspectorGUI();
-                        inspector.CalculateColliderFromCurrentMeshFilter();
-                    }
-                }
+                this.QueryAllComplexCollider(inspector => inspector.CalculateColliderFromCurrentMeshFilter());
             }
             if (GUILayout.Button("Calculate Colliders From Child Mesh Filter"))
             {
-                var allObj = FindObjectsByType<ComplexCollider>(FindObjectsSortMode.None);
-                foreach (var obj in allObj)
+                this.QueryAllComplexCollider(inspector => inspector.CalculateColliderFromChildMeshFilter());
+            }
+            if (GUILayout.Button("Clear Collider and Data"))
+            {
+                this.QueryAllComplexCollider(inspector => inspector.ClearColliderData());
+            }
+        }
+
+        private void QueryAllComplexCollider(Action<ComplexColliderEditor> callback)
+        {
+            var allObj = FindObjectsByType<ComplexCollider>(FindObjectsSortMode.None);
+            foreach (var obj in allObj)
+            {
+                var inspector = (ComplexColliderEditor)Editor.CreateEditor(obj);
+                if (inspector != null)
                 {
-                    var inspector = (ComplexColliderEditor)Editor.CreateEditor(obj);
-                    if (inspector != null)
-                    {
-                        inspector.OnInspectorGUI();
-                        inspector.CalculateColliderFromChildMeshFilter();
-                    }
+                    inspector.OnInspectorGUI();
+                    callback?.Invoke(inspector);
                 }
             }
         }

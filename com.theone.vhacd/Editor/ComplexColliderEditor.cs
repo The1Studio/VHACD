@@ -247,6 +247,13 @@ namespace VHACD.Unity
             }
             EditorGUI.EndDisabledGroup();
 
+            EditorGUI.BeginDisabledGroup(!this._base.ColliderData);
+            if (GUILayout.Button("Clear Colliders and Data"))
+            {
+                this.ClearColliderData();
+            }
+            EditorGUI.EndDisabledGroup();
+
             EditorGUILayout.PropertyField(_combineBeforeCompute);
 
             EditorGUI.EndDisabledGroup();
@@ -291,6 +298,24 @@ namespace VHACD.Unity
             else
             {
                 CalculateColliders(_base.Parameters, null, true);
+            }
+        }
+
+        public void ClearColliderData()
+        {
+            if (this._base)
+            {
+                foreach (var col in this._base.GetComponentsInChildren<MeshCollider>())
+                {
+                    DestroyImmediate(col);
+                }
+                if (this._base.ColliderData != null)
+                {
+                    AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(this._base.ColliderData));
+                }
+
+                this._base.ColliderData = null;
+                this._base.Colliders.Clear();
             }
         }
 

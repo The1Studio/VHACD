@@ -36,7 +36,8 @@ namespace VHACD.Unity
         [SerializeField]
         private List<MeshCollider> _colliders = new List<MeshCollider>();
 
-        public List<MeshCollider> Colliders => _colliders;
+        public List<MeshCollider>  Colliders    => _colliders;
+        public ComplexColliderData ColliderData { get => this._colliderData; set => this._colliderData = value; }
 
         [SerializeField, Tooltip("Applies to all child colliders")]
         private bool _isTrigger = false;
